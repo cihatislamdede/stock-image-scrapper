@@ -15,10 +15,11 @@ class FreeImagesCrawler:
         return soup
 
     def parse_soup(self, soup: BeautifulSoup) -> list:
-        divs = soup.find_all('div', class_='photo-grid-item')
-        images = [div.find('img')['src'] for div in divs]
-        images.pop(0)
-        images.pop()
+        hyperlinks = soup.find_all('a', class_='photo-grid-preview')
+        images = {}
+        for hyperlink in hyperlinks:
+            # https://stocksnap.io + href for full url
+            images[hyperlink.find('img')['src']] = hyperlink['href']
         return images
 
 
@@ -26,4 +27,6 @@ if __name__ == '__main__':
     freepik = FreeImagesCrawler()
     query = input('Search something: ')
     soup = freepik.get_soup(query)
-    freepik.parse_soup(soup)
+    images = freepik.parse_soup(soup)
+    for image, hyperlink in images.items():
+        print(image, hyperlink)

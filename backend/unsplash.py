@@ -15,8 +15,10 @@ class UnsplashCrawler:
         return soup
 
     def parse_soup(self, soup: BeautifulSoup) -> list:
-        divs = soup.find_all('div', {'data-test': 'search-photos-route'})
-        images = [img['src'] for img in divs[0].find_all('img')]
+        divs = soup.find_all('figure', {'data-test': 'photo-grid-multi-col-figure'})
+        images = {}
+        for div in divs:
+            images[div.find('img')['src']] = div.find('a')['href']
         return images
 
 
@@ -25,5 +27,5 @@ if __name__ == '__main__':
     query = input('Search something: ')
     soup = freepik.get_soup(query)
     images = freepik.parse_soup(soup)
-    for image in images:
-        print(image)
+    for image, hyperlink in images.items():
+        print(image, hyperlink)

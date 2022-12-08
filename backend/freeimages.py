@@ -24,9 +24,9 @@ class FreeImagesCrawler:
             try:
                 # https://www.freeimages.com + hyperlink
                 hyperlink = sub_div.find_all(
-                    'a', {'class': 'flex h-full items-end px-4 py-3'})[0]['href']
+                    'a', {'class': 'flex h-full items-end px-4 py-3'})[0]
                 image = sub_div.find_all('img')[0]['data-src']
-                images[image] = hyperlink
+                images[image] = hyperlink['href']
             except AttributeError:
                 continue
             except IndexError:

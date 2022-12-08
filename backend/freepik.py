@@ -19,15 +19,16 @@ class FreepikCrawler:
         # get figures
         figures = [figure for figure in sections[0].find_all(
             'figure', {"class": "showcase__item"})]
-        # get all figure data-image
-        images = [figure['data-image'] for figure in figures]
+        images = {}
+        for figure in figures:
+            hyperlink = figure.find('a', {'class': 'showcase__link js-detail-data-link'})
+            images[figure['data-image']] = hyperlink['href']
         return images
-
 
 if __name__ == '__main__':
     freepik = FreepikCrawler()
     query = input('Search something: ')
     soup = freepik.get_soup(query)
     images = freepik.parse_soup(soup)
-    for image in images:
-        print(image)
+    for image, hyperlink in images.items():
+        print(image, hyperlink)
