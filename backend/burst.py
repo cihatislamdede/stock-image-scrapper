@@ -15,8 +15,13 @@ class BurstCrawler:
         return soup
 
     def parse_soup(self, soup: BeautifulSoup) -> list:
-        divs = soup.find_all('div', {'class': 'js-masonry-grid'})
-        images = [img['src'] for img in divs[0].find_all('img')]
+        divs = soup.find_all('div', {'class': 'photo-tile'})
+        images = {}
+        for div in divs:
+            image = div.find('img')
+            hyperlink = div.find('a')
+            # "https://burst.shopify.com" + hyperlink['href'] for full url
+            images[image['src']] = hyperlink['href']
         return images
 
 
@@ -25,5 +30,5 @@ if __name__ == '__main__':
     query = input('Search something: ')
     soup = freepik.get_soup(query)
     images = freepik.parse_soup(soup)
-    for image in images:
-        print(image)
+    for image, hyperlink in images.items():
+        print(image, hyperlink)

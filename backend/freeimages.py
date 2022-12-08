@@ -15,13 +15,22 @@ class FreeImagesCrawler:
         return soup
 
     def parse_soup(self, soup: BeautifulSoup) -> list:
-        divs = soup.find_all('div', {'class': 'pr-0 md:pr-2 masonry-container'})
-        image_divs = divs[0].find_all('div', {'class': 'grid-image-wrapper w-full h-full'})
-        images = []
-        for div in image_divs:
-            image = div.find('img')
-            if image["src"] != "#":
-                images.append(image['src'])
+        divs = soup.find_all(
+            'div', {'class': 'pr-0 md:pr-2 masonry-container'})
+        sub_divs = divs[0].find_all(
+            'div', {'class': 'w-full h-full relative group'})
+        images = {}
+        for sub_div in sub_divs:
+            try:
+                # https://www.freeimages.com + hyperlink
+                hyperlink = sub_div.find_all(
+                    'a', {'class': 'flex h-full items-end px-4 py-3'})[0]['href']
+                image = sub_div.find_all('img')[0]['data-src']
+                images[image] = hyperlink
+            except AttributeError:
+                continue
+            except IndexError:
+                continue
         return images
 
 
@@ -30,5 +39,5 @@ if __name__ == '__main__':
     query = input('Search something: ')
     soup = freepik.get_soup(query)
     images = freepik.parse_soup(soup)
-    for image in images:
-        print(image)
+    for image, hyperlink in images.items():
+        print(image, hyperlink)
