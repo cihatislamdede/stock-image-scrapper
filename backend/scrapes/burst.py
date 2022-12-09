@@ -14,7 +14,7 @@ class BurstCrawler:
         soup = BeautifulSoup(response.text, 'html.parser')
         return soup
 
-    def parse_soup(self, soup: BeautifulSoup) -> list:
+    def parse_soup(self, soup: BeautifulSoup) -> dict:
         divs = soup.find_all('div', {'class': 'photo-tile'})
         images = {}
         for div in divs:
@@ -26,9 +26,9 @@ class BurstCrawler:
 
 
 if __name__ == '__main__':
-    freepik = BurstCrawler()
+    crawler = BurstCrawler()
     query = input('Search something: ')
-    soup = freepik.get_soup(query)
-    images = freepik.parse_soup(soup)
+    soup = crawler.get_soup(query)
+    images = crawler.parse_soup(soup)
     for image, hyperlink in images.items():
         print(image, hyperlink)

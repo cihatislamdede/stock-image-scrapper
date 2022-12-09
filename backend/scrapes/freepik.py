@@ -13,7 +13,7 @@ class FreepikCrawler:
         soup = BeautifulSoup(response.text, 'html.parser')
         return soup
 
-    def parse_soup(self, soup: BeautifulSoup) -> list:
+    def parse_soup(self, soup: BeautifulSoup) -> dict:
         # get sections
         sections = soup.find_all('section', {'class': 'showcase'})
         # get figures
@@ -26,9 +26,9 @@ class FreepikCrawler:
         return images
 
 if __name__ == '__main__':
-    freepik = FreepikCrawler()
+    crawler = FreepikCrawler()
     query = input('Search something: ')
-    soup = freepik.get_soup(query)
-    images = freepik.parse_soup(soup)
+    soup = crawler.get_soup(query)
+    images = crawler.parse_soup(soup)
     for image, hyperlink in images.items():
         print(image, hyperlink)
