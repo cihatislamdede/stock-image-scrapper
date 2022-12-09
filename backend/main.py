@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from crawlers.adobestock import AdobeStockCrawler
 from crawlers.burst import BurstCrawler
 from crawlers.freeimages import FreeImagesCrawler
@@ -8,6 +10,14 @@ from crawlers.unsplash import UnsplashCrawler
 
 app = FastAPI()
 
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/images/search")
 async def images(q: str, exclude: str = None):
     if exclude is not None:
@@ -16,16 +26,34 @@ async def images(q: str, exclude: str = None):
         exclude = []
     response = {}
     if "adobestock" not in exclude:
-        response["adobestock"] = AdobeStockCrawler().get_images(query=q)
+        try:
+            response["adobestock"] = AdobeStockCrawler().get_images(query=q)
+        except IndexError:
+            response["adobestock"] = []
     if "burst" not in exclude:
-        response["burst"] = BurstCrawler().get_images(query=q)
+        try:
+            response["burst"] = BurstCrawler().get_images(query=q)
+        except IndexError:
+            response["burst"] = []
     if "freeimages" not in exclude:
-        response["freeimages"] = FreeImagesCrawler().get_images(query=q)
+        try:
+            response["freeimages"] = FreeImagesCrawler().get_images(query=q)
+        except IndexError:
+            response["freeimages"] = []
     if "freepik" not in exclude:
-        response["freepik"] = FreepikCrawler().get_images(query=q)
+        try:
+            response["freepik"] = FreepikCrawler().get_images(query=q)
+        except IndexError:
+            response["freepik"] = []
     if "stocksnap" not in exclude:
-        response["stocksnap"] = StockSnapCrawler().get_images(query=q)
+        try:
+            response["stocksnap"] = StockSnapCrawler().get_images(query=q)
+        except IndexError:
+            response["stocksnap"] = []
     if "unsplash" not in exclude:
-        response["unsplash"] = UnsplashCrawler().get_images(query=q)
+        try:
+            response["unsplash"] = UnsplashCrawler().get_images(query=q)
+        except IndexError:
+            response["unsplash"] = []
     
     return {"status": "success", "data": response}
