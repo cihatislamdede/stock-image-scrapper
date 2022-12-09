@@ -33,11 +33,7 @@ class FreeImagesCrawler:
                 continue
         return images
 
-
-if __name__ == '__main__':
-    crawler = FreeImagesCrawler()
-    query = input('Search something: ')
-    soup = crawler.get_soup(query)
-    images = crawler.parse_soup(soup)
-    for image, hyperlink in images.items():
-        print(image, hyperlink)
+    def get_images(self, query: str) -> dict:
+        soup = self.get_soup(query)
+        images = self.parse_soup(soup)
+        return images

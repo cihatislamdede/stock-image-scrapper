@@ -15,17 +15,14 @@ class UnsplashCrawler:
         return soup
 
     def parse_soup(self, soup: BeautifulSoup) -> dict:
-        divs = soup.find_all('figure', {'data-test': 'photo-grid-multi-col-figure'})
+        divs = soup.find_all(
+            'figure', {'data-test': 'photo-grid-multi-col-figure'})
         images = {}
         for div in divs:
             images[div.find('img')['src']] = div.find('a')['href']
         return images
 
-
-if __name__ == '__main__':
-    crawler = UnsplashCrawler()
-    query = input('Search something: ')
-    soup = crawler.get_soup(query)
-    images = crawler.parse_soup(soup)
-    for image, hyperlink in images.items():
-        print(image, hyperlink)
+    def get_images(self, query: str) -> dict:
+        soup = self.get_soup(query)
+        images = self.parse_soup(soup)
+        return images

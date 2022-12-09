@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 
 
-class FreeImagesCrawler:
+class StockSnapCrawler:
     def __init__(self):
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36'}
@@ -22,11 +22,7 @@ class FreeImagesCrawler:
             images[hyperlink.find('img')['src']] = hyperlink['href']
         return images
 
-
-if __name__ == '__main__':
-    crawler = FreeImagesCrawler()
-    query = input('Search something: ')
-    soup = crawler.get_soup(query)
-    images = crawler.parse_soup(soup)
-    for image, hyperlink in images.items():
-        print(image, hyperlink)
+    def get_images(self, query: str) -> dict:
+        soup = self.get_soup(query)
+        images = self.parse_soup(soup)
+        return images
