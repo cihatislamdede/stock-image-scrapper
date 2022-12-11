@@ -26,7 +26,7 @@ export default function Home() {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 console.log("searchTerm:", searchTerm);
-                const newTerm = searchTerm.replace(" ", "-");
+                const newTerm = searchTerm.replace(" ", "+");
                 router.push(`/search/${newTerm}`);
               }
             }}
