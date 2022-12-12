@@ -13,6 +13,11 @@ export default function Seachterm() {
       try {
         setImgUrls(res.data);
         setLoading(false);
+        console.log("res.data:", res.data);
+        console.log(
+          "res.data.adobestock keys:",
+          Object.keys(res.data.adobestock)
+        );
       } catch (error) {
         console.log(error);
       }
@@ -38,6 +43,19 @@ export default function Seachterm() {
       >
         log
       </button>
+      <div>
+        {loading ? null : (
+          <div>
+            {Object.keys(imgUrls.adobestock).map((imgURL) => {
+              return (
+                <div>
+                  <img src={imgURL} loading="lazy" />
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
