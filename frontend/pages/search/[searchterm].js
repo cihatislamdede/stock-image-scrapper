@@ -46,12 +46,23 @@ export default function Seachterm() {
       <div>
         {loading ? null : (
           <div>
-            {Object.keys(imgUrls.adobestock).map((imgURL) => {
-              return (
-                <div>
-                  <img src={imgURL} loading="lazy" />
-                </div>
-              );
+            {Object.keys(imgUrls).map((source) => {
+              console.log("source:", source);
+              return Object.keys(imgUrls[source]).map((imgURL) => {
+                console.log("imgURL:", imgURL);
+                return (
+                  <div>
+                    <a href={imgUrls[source][imgURL]} target="_blank">
+                      <img
+                        src={imgURL}
+                        loading="lazy"
+                        width="200"
+                        height="auto"
+                      />
+                    </a>
+                  </div>
+                );
+              });
             })}
           </div>
         )}
