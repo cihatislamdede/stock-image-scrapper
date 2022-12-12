@@ -21,7 +21,7 @@ app.add_middleware(
 @app.get("/images/search")
 async def images(q: str, exclude: str = None):
     if exclude is not None:
-        exclude = exclude.split(" ") 
+        exclude = exclude.split("+") 
     else:
         exclude = []
     response = {}
