@@ -6,6 +6,7 @@ export default function Seachterm() {
   const router = useRouter();
   const { searchterm } = router.query;
   const [imgUrls, setImgUrls] = useState([]);
+  const [shuffledImages, setShuffledImages] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchImages = async () => {
@@ -13,11 +14,46 @@ export default function Seachterm() {
       try {
         setImgUrls(res.data);
         setLoading(false);
-        console.log("res.data:", res.data);
-        console.log(
-          "res.data.adobestock keys:",
-          Object.keys(res.data.adobestock)
-        );
+
+        let allImages = [];
+        Object.keys(res.data).map((source) => {
+          console.log("source:", source);
+          Object.keys(res.data[source]).map((imgURL) => {
+            //except freepik and adobe
+            //all : adobestock, burst, freeimages, freepik, stocksnap, unsplash
+            if (source === "burst") {
+              allImages.push({
+                url: "https://burst.shopify.com" + res.data[source][imgURL],
+                img: imgURL,
+              });
+            } else if (source === "freeimages") {
+              allImages.push({
+                url: "https://www.freeimages.com" + res.data[source][imgURL],
+                img: imgURL,
+              });
+            } else if (source === "stocksnap") {
+              allImages.push({
+                url: "https://stocksnap.io" + res.data[source][imgURL],
+                img: imgURL,
+              });
+            } else if (source === "unsplash") {
+              allImages.push({
+                url: "https://unsplash.com" + res.data[source][imgURL],
+                img: imgURL,
+              });
+            } else {
+              allImages.push({
+                url: res.data[source][imgURL],
+                img: imgURL,
+              });
+            }
+          });
+        });
+
+        const allShuffledImages = shuffleImages(allImages);
+        setShuffledImages(allShuffledImages);
+
+        console.log("shuffledImages", shuffledImages);
       } catch (error) {
         console.log(error);
       }
@@ -33,6 +69,20 @@ export default function Seachterm() {
     }
   }, [searchterm]);
 
+  const shuffleImages = (images) => {
+    let currentIndex = images.length,
+      temporaryValue,
+      randomIndex;
+    while (0 !== currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      temporaryValue = images[currentIndex];
+      images[currentIndex] = images[randomIndex];
+      images[randomIndex] = temporaryValue;
+    }
+    return images;
+  };
+
   return (
     <div>
       <h1>{loading ? "Loading" : "Loaded"}</h1>
@@ -46,24 +96,13 @@ export default function Seachterm() {
       <div>
         {loading ? null : (
           <div>
-            {Object.keys(imgUrls).map((source) => {
-              console.log("source:", source);
-              return Object.keys(imgUrls[source]).map((imgURL) => {
-                console.log("imgURL:", imgURL);
-                return (
-                  <div>
-                    <a href={imgUrls[source][imgURL]} target="_blank">
-                      <img
-                        src={imgURL}
-                        loading="lazy"
-                        width="200"
-                        height="auto"
-                      />
-                    </a>
-                  </div>
-                );
-              });
-            })}
+            {shuffledImages.map((image) => (
+              <div key={image.img}>
+                <a href={image.url} target="_blank">
+                  <img src={image.img} alt="" />
+                </a>
+              </div>
+            ))}
           </div>
         )}
       </div>
