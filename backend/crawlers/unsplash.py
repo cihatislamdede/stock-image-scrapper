@@ -19,7 +19,10 @@ class UnsplashCrawler:
             'figure', {'data-test': 'photo-grid-multi-col-figure'})
         images = {}
         for div in divs:
-            images[div.find('img')['src']] = div.find('a')['href']
+            try:
+                images[div.find('img')['src']] = div.find('a')['href']
+            except:
+                pass
         return images
 
     def get_images(self, query: str) -> dict:

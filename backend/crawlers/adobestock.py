@@ -19,9 +19,12 @@ class AdobeStockCrawler:
             'a', {'class': 'js-search-result-thumbnail non-js-link'})
         images = {}
         for hl in hyperlinks:
-            image = hl.find('meta', {'itemprop': 'contentUrl'})
-            hyperlink = hl.find('meta', {'itemprop': 'acquireLicensePage'})
-            images[image['content']] = hyperlink['content']
+            try:
+                image = hl.find('meta', {'itemprop': 'contentUrl'})
+                hyperlink = hl.find('meta', {'itemprop': 'acquireLicensePage'})
+                images[image['content']] = hyperlink['content']
+            except:
+                pass
         return images
     
     def get_images(self, query: str) -> dict:

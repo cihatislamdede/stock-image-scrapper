@@ -27,10 +27,8 @@ class FreeImagesCrawler:
                     'a', {'class': 'flex h-full items-end px-4 py-3'})[0]
                 image = sub_div.find_all('img')[0]['data-src']
                 images[image] = hyperlink['href']
-            except AttributeError:
-                continue
-            except IndexError:
-                continue
+            except:
+                pass
         return images
 
     def get_images(self, query: str) -> dict:

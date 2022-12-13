@@ -21,9 +21,12 @@ class FreepikCrawler:
             'figure', {"class": "showcase__item"})]
         images = {}
         for figure in figures:
-            hyperlink = figure.find(
+            try:
+                hyperlink = figure.find(
                 'a', {'class': 'showcase__link js-detail-data-link'})
-            images[figure['data-image']] = hyperlink['href']
+                images[figure['data-image']] = hyperlink['href']
+            except:
+                pass
         return images
 
     def get_images(self, query: str) -> dict:

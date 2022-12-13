@@ -18,10 +18,13 @@ class BurstCrawler:
         divs = soup.find_all('div', {'class': 'photo-tile'})
         images = {}
         for div in divs:
-            image = div.find('img')
-            hyperlink = div.find('a')
-            # "https://burst.shopify.com" + hyperlink['href'] for full url
-            images[image['src']] = hyperlink['href']
+            try:
+                image = div.find('img')
+                hyperlink = div.find('a')
+                # "https://burst.shopify.com" + hyperlink['href'] for full url
+                images[image['src']] = hyperlink['href']
+            except:
+                pass
         return images
 
     def get_images(self, query: str) -> dict:

@@ -19,7 +19,10 @@ class StockSnapCrawler:
         images = {}
         for hyperlink in hyperlinks:
             # https://stocksnap.io + href for full url
-            images[hyperlink.find('img')['src']] = hyperlink['href']
+            try:
+                images[hyperlink.find('img')['src']] = hyperlink['href']
+            except:
+                pass
         return images
 
     def get_images(self, query: str) -> dict:
