@@ -57,7 +57,7 @@ def images(q: str, exclude: str = None):
         except IndexError:
             response["unsplash"] = []
     
-    return {"status": "success", "data": response}
+    return response
 
 
 @app.get("/search/adobestock")
@@ -66,7 +66,7 @@ def adobestock(q: str):
         response = AdobeStockCrawler().get_images(query=q)
     except IndexError:
         response = []
-    return {"status": "success", "data": response}
+    return response
 
 
 @app.get("/search/burst")
@@ -75,7 +75,7 @@ def burst(q: str):
         response = BurstCrawler().get_images(query=q)
     except IndexError:
         response = []
-    return {"status": "success", "data": response}
+    return response
 
 @app.get("/search/freeimages")
 def freeimages(q: str):
@@ -83,7 +83,7 @@ def freeimages(q: str):
         response = FreeImagesCrawler().get_images(query=q)
     except IndexError:
         response = []
-    return {"status": "success", "data": response}
+    return response
 
 @app.get("/search/freepik")
 def freepik(q: str):
@@ -91,7 +91,7 @@ def freepik(q: str):
         response = FreepikCrawler().get_images(query=q)
     except IndexError:
         response = []
-    return {"status": "success", "data": response}
+    return response
 
 @app.get("/search/stocksnap")
 def stocksnap(q: str):
@@ -99,7 +99,7 @@ def stocksnap(q: str):
         response = StockSnapCrawler().get_images(query=q)
     except IndexError:
         response = []
-    return {"status": "success", "data": response}
+    return response
 
 @app.get("/search/unsplash")
 def unsplash(q: str):
@@ -107,4 +107,4 @@ def unsplash(q: str):
         response = UnsplashCrawler().get_images(query=q)
     except IndexError:
         response = []
-    return {"status": "success", "data": response}
+    return response
