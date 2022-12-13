@@ -119,7 +119,9 @@ export default function Seachterm() {
                   onClick={() => {
                     setPaging(page);
                   }}
-                  className="rounded-md border-4 border-black p-2 m-2"
+                  className={`rounded-md border-2 w-12 h-12 border-slate-800 bg-slate-50  font-semibold text-slate-800 transition-all p-2 m-2 ${
+                    paging === page ? "bg-green-200" : "hover:bg-slate-200"
+                  }`}
                 >
                   {page}
                 </button>
@@ -127,15 +129,19 @@ export default function Seachterm() {
             : null
         }
       </div>
-      {loading ? null : <p>{paging}</p>}
-      <div className="flex flex-row">
+      <div className="flex flex-wrap max-w-5xl justify-center mx-auto gap-2">
         {shuffledImages.length > 0
           ? shuffledImages
               .slice((paging - 1) * pageLength, paging * pageLength)
               .map((image) => (
-                <div key={image.img}>
+                <div key={image.img} className="w-48 h-48 rounded-md">
                   <a href={image.url} target="_blank" rel="noopener noreferrer">
-                    <img src={image.img} alt={searchterm} loading="lazy" />
+                    <img
+                      src={image.img}
+                      alt={searchterm}
+                      loading="lazy"
+                      className="rounded-md w-48 h-48 object-scale-down"
+                    />
                   </a>
                 </div>
               ))
