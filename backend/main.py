@@ -18,8 +18,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/images/search")
-async def images(q: str, exclude: str = None):
+# Search all images from all crawlers
+@app.get("/search")
+def images(q: str, exclude: str = None):
     if exclude is not None:
         exclude = exclude.split("+") 
     else:
@@ -56,4 +57,54 @@ async def images(q: str, exclude: str = None):
         except IndexError:
             response["unsplash"] = []
     
+    return {"status": "success", "data": response}
+
+
+@app.get("/search/adobestock")
+def adobestock(q: str):
+    try:
+        response = AdobeStockCrawler().get_images(query=q)
+    except IndexError:
+        response = []
+    return {"status": "success", "data": response}
+
+
+@app.get("/search/burst")
+def burst(q: str):
+    try:
+        response = BurstCrawler().get_images(query=q)
+    except IndexError:
+        response = []
+    return {"status": "success", "data": response}
+
+@app.get("/search/freeimages")
+def freeimages(q: str):
+    try:
+        response = FreeImagesCrawler().get_images(query=q)
+    except IndexError:
+        response = []
+    return {"status": "success", "data": response}
+
+@app.get("/search/freepik")
+def freepik(q: str):
+    try:
+        response = FreepikCrawler().get_images(query=q)
+    except IndexError:
+        response = []
+    return {"status": "success", "data": response}
+
+@app.get("/search/stocksnap")
+def stocksnap(q: str):
+    try:
+        response = StockSnapCrawler().get_images(query=q)
+    except IndexError:
+        response = []
+    return {"status": "success", "data": response}
+
+@app.get("/search/unsplash")
+def unsplash(q: str):
+    try:
+        response = UnsplashCrawler().get_images(query=q)
+    except IndexError:
+        response = []
     return {"status": "success", "data": response}
