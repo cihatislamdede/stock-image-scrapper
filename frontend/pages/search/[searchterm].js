@@ -2,11 +2,14 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getImages } from "../../utils/getImages";
 
+const pageLength = 50;
+
 export default function Seachterm() {
   const router = useRouter();
   const { searchterm } = router.query;
   const [imgUrls, setImgUrls] = useState([]);
   const [shuffledImages, setShuffledImages] = useState([]);
+  const [paging, setPaging] = useState(1);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchImages = async () => {
@@ -93,18 +96,38 @@ export default function Seachterm() {
       >
         log
       </button>
+      <p>{shuffledImages.length}</p>
+      {
+        //create buttons per {pageLength} image
+        shuffledImages.length > 0
+          ? Array.from(
+              { length: Math.ceil(shuffledImages.length / pageLength) },
+              (v, i) => i + 1
+            ).map((page) => (
+              <button
+                key={page}
+                onClick={() => {
+                  setPaging(page);
+                }}
+              >
+                -{page}-
+              </button>
+            ))
+          : null
+      }
+      <p>{paging}</p>
       <div>
-        {loading ? null : (
-          <div>
-            {shuffledImages.map((image) => (
-              <div key={image.img}>
-                <a href={image.url} target="_blank">
-                  <img src={image.img} alt="" />
-                </a>
-              </div>
-            ))}
-          </div>
-        )}
+        {shuffledImages.length > 0
+          ? shuffledImages
+              .slice((paging - 1) * pageLength, paging * pageLength)
+              .map((image) => (
+                <div key={image.img}>
+                  <a href={image.url} target="_blank" rel="noopener noreferrer">
+                    <img src={image.img} alt={image.img} />
+                  </a>
+                </div>
+              ))
+          : null}
       </div>
     </div>
   );
