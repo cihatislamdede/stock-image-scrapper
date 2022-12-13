@@ -96,34 +96,46 @@ export default function Seachterm() {
       >
         log
       </button>
-      <p>{shuffledImages.length}</p>
-      {
-        //create buttons per {pageLength} image
-        shuffledImages.length > 0
-          ? Array.from(
-              { length: Math.ceil(shuffledImages.length / pageLength) },
-              (v, i) => i + 1
-            ).map((page) => (
-              <button
-                key={page}
-                onClick={() => {
-                  setPaging(page);
-                }}
-              >
-                -{page}-
-              </button>
-            ))
-          : null
-      }
-      <p>{paging}</p>
-      <div>
+      <p>
+        Total Images:{" "}
+        <span>
+          {loading ? (
+            <span className="animate-pulse">Loading</span>
+          ) : (
+            shuffledImages.length
+          )}
+        </span>
+      </p>
+      <div className="flex flex-row justify-center ">
+        {
+          //create buttons per {pageLength} image
+          shuffledImages.length > 0
+            ? Array.from(
+                { length: Math.ceil(shuffledImages.length / pageLength) },
+                (v, i) => i + 1
+              ).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => {
+                    setPaging(page);
+                  }}
+                  className="rounded-md border-4 border-black p-2 m-2"
+                >
+                  {page}
+                </button>
+              ))
+            : null
+        }
+      </div>
+      {loading ? null : <p>{paging}</p>}
+      <div className="flex flex-row">
         {shuffledImages.length > 0
           ? shuffledImages
               .slice((paging - 1) * pageLength, paging * pageLength)
               .map((image) => (
                 <div key={image.img}>
                   <a href={image.url} target="_blank" rel="noopener noreferrer">
-                    <img src={image.img} alt={image.img} />
+                    <img src={image.img} alt={searchterm} loading="lazy" />
                   </a>
                 </div>
               ))
