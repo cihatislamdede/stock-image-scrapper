@@ -6,7 +6,7 @@ const SOURCES = ["stocksnap", "adobestock", "burst", "freepik", "unsplash"];
 export const getImages = async (query, exclude) => {
   exclude = exclude || [];
   let data = {};
-  Promise.all(
+  await Promise.all(
     SOURCES.map(async (source) => {
       if (exclude.includes(source)) return;
       const response = await axios.get(
@@ -14,8 +14,6 @@ export const getImages = async (query, exclude) => {
       );
       data[source] = response.data;
     })
-  ).then(() => {
-    console.log("data", data);
-    return data;
-  });
+  );
+  return data;
 };

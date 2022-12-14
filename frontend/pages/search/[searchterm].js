@@ -6,57 +6,58 @@ const pageLength = 50;
 
 export default function Seachterm() {
   const router = useRouter();
-  const { searchterm } = router.query;
+  const { searchterm, exclude } = router.query;
   const [imgUrls, setImgUrls] = useState([]);
   const [shuffledImages, setShuffledImages] = useState([]);
   const [paging, setPaging] = useState(1);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchImages = async () => {
-      const res = await getImages(searchterm);
       try {
-        setImgUrls(res.data);
-        setLoading(false);
-
+        let toexclude = [];
+        if (exclude) {
+          toexclude = exclude.split(",");
+        }
         let allImages = [];
-        Object.keys(res.data).map((source) => {
+        const resdata = await getImages(searchterm, toexclude);
+        console.log("resdata", resdata);
+        Object.keys(resdata).map((source) => {
           console.log("source:", source);
-          Object.keys(res.data[source]).map((imgURL) => {
+          Object.keys(resdata[source]).map((imgURL) => {
             //except freepik and adobe
             //all : adobestock, burst, freeimages, freepik, stocksnap, unsplash
             if (source === "burst") {
               allImages.push({
-                url: "https://burst.shopify.com" + res.data[source][imgURL],
+                url: "https://burst.shopify.com" + resdata[source][imgURL],
                 img: imgURL,
               });
             } else if (source === "freeimages") {
               allImages.push({
-                url: "https://www.freeimages.com" + res.data[source][imgURL],
+                url: "https://www.freeimages.com" + resdata[source][imgURL],
                 img: imgURL,
               });
             } else if (source === "stocksnap") {
               allImages.push({
-                url: "https://stocksnap.io" + res.data[source][imgURL],
+                url: "https://stocksnap.io" + resdata[source][imgURL],
                 img: imgURL,
               });
             } else if (source === "unsplash") {
               allImages.push({
-                url: "https://unsplash.com" + res.data[source][imgURL],
+                url: "https://unsplash.com" + resdata[source][imgURL],
                 img: imgURL,
               });
             } else {
               allImages.push({
-                url: res.data[source][imgURL],
+                url: resdata[source][imgURL],
                 img: imgURL,
               });
             }
           });
         });
-
-        const allShuffledImages = shuffleImages(allImages);
-        setShuffledImages(allShuffledImages);
-
-        console.log("shuffledImages", shuffledImages);
+        console.log("allImages:", allImages);
+        setImgUrls(allImages);
+        setShuffledImages(shuffleImages(allImages));
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -64,6 +65,7 @@ export default function Seachterm() {
 
     if (searchterm) {
       console.log("searchterm:", searchterm);
+      console.log("exclude:", exclude);
       try {
         fetchImages();
       } catch (error) {
