@@ -92,47 +92,63 @@ export default function Search() {
     );
   }
 
+  console.log(shuffledImages);
+
   return (
     <div className="bg-gray-900">
-      <div className="flex flex-row justify-center ">
-        {
-          //create buttons per {PAGE_SIZE} image
-          shuffledImages.length > 0
-            ? Array.from(
-                { length: Math.ceil(shuffledImages.length / PAGE_SIZE) },
-                (v, i) => i + 1
-              ).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => {
-                    setPaging(page);
-                  }}
-                  className={`rounded-md border-2 w-12 h-12 border-slate-800 bg-slate-50  font-semibold text-slate-800 transition-all p-2 m-2 ${
-                    paging === page ? "bg-purple-200" : "hover:bg-purple-400"
-                  }`}
-                >
-                  {page}
-                </button>
-              ))
-            : null
-        }
+      {/* back button to search page */}
+      <div className="flex flex-row justify-center">
+        <button
+          onClick={() => {
+            router.push("/");
+          }}
+          className="rounded-md border-2 w-24 h-12 border-slate-800 bg-slate-50  font-semibold text-slate-800 p-2 m-2 hover:bg-purple-400 transition-all"
+        >
+          Back
+        </button>
       </div>
-      <div className="flex flex-wrap max-w-5xl justify-center mx-auto gap-2">
+      <p className="text-2xl font-semibold text-center italic text-slate-400">
+        {q} results <br/> ({shuffledImages.length} images)
+      </p>
+      <div className="grid gap-6 row-gap-5 mb-8 px-16 py-8 lg:grid-cols-5 sm:row-gap-6 sm:grid-cols-3">
+        {shuffledImages.length > 0 ? (
+          shuffledImages
+            .slice((paging - 1) * PAGE_SIZE, paging * PAGE_SIZE)
+            .map((image) => (
+              <div className="relative overflow-hidden transition duration-200 transform rounded shadow-lg hover:-translate-y-2 hover:shadow-2xl">
+                <a href={image.url} target="_blank" rel="noreferrer">
+                <img
+                  className="object-cover w-full h-56 md:h-64 xl:h-80"
+                  src={image.img}
+                  alt={image.url}
+                />
+                </a>
+              </div>
+            ))
+        ) : (
+          <p> No images found </p>
+        )}
+      </div>
+      <div className="flex flex-row justify-center ">
         {shuffledImages.length > 0
-          ? shuffledImages
-              .slice((paging - 1) * PAGE_SIZE, paging * PAGE_SIZE)
-              .map((image) => (
-                <div key={image.img} className="w-48 h-48 rounded-md">
-                  <a href={image.url} target="_blank" rel="noopener noreferrer">
-                    <img
-                      src={image.img}
-                      alt={q}
-                      loading="lazy"
-                      className="rounded-md w-48 h-48 object-scale-down"
-                    />
-                  </a>
-                </div>
-              ))
+          ? Array.from(
+              { length: Math.ceil(shuffledImages.length / PAGE_SIZE) },
+              (v, i) => i + 1
+            ).map((page) => (
+              <button
+                key={page}
+                onClick={() => {
+                  setPaging(page);
+                }}
+                className={`rounded-md border-2 w-12 h-12 border-slate-800 bg-slate-50  font-semibold text-slate-800 transition-all p-2 m-2 ${
+                  paging === page
+                    ? "bg-purple-300"
+                    : "hover:bg-purple-400 transition-all"
+                }`}
+              >
+                {page}
+              </button>
+            ))
           : null}
       </div>
     </div>

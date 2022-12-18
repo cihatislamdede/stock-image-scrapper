@@ -11,7 +11,10 @@ export default function Home() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (!searchTerm) return;
+    if (!searchTerm) {
+      alert("Please enter something to search");
+      return;
+    }
     const exclude =
       excludeSources.length > 0
         ? excludeSources.map((s) => s.toLowerCase()).join("+")
