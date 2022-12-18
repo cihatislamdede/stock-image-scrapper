@@ -17,7 +17,6 @@ export default function Search() {
       try {
         let allImages = [];
         const resdata = await getImages(q, exclude);
-        console.log(resdata);
         Object.keys(resdata).map((source) => {
           Object.keys(resdata[source]).map((imgURL) => {
             //except freepik and adobe
@@ -26,26 +25,31 @@ export default function Search() {
               allImages.push({
                 url: "https://burst.shopify.com" + resdata[source][imgURL],
                 img: imgURL,
+                source: "burst",
               });
             } else if (source === "freeimages") {
               allImages.push({
                 url: "https://www.freeimages.com" + resdata[source][imgURL],
                 img: imgURL,
+                source: "freeimages",
               });
             } else if (source === "stocksnap") {
               allImages.push({
                 url: "https://stocksnap.io" + resdata[source][imgURL],
                 img: imgURL,
+                source: "stocksnap",
               });
             } else if (source === "unsplash") {
               allImages.push({
                 url: "https://unsplash.com" + resdata[source][imgURL],
                 img: imgURL,
+                source: "unsplash",
               });
-            } else {
+            } else if (source === "adobestock") {
               allImages.push({
                 url: resdata[source][imgURL],
                 img: imgURL,
+                source: "adobestock",
               });
             }
           });
@@ -92,8 +96,6 @@ export default function Search() {
     );
   }
 
-  console.log(shuffledImages);
-
   return (
     <div className="bg-gray-900">
       {/* back button to search page */}
@@ -102,13 +104,14 @@ export default function Search() {
           onClick={() => {
             router.push("/");
           }}
-          className="rounded-md border-2 w-24 h-12 border-slate-800 bg-slate-50  font-semibold text-slate-800 p-2 m-2 hover:bg-purple-400 transition-all"
-        >
+          className="inline-flex items-center py-2.5 mt-4 px-4 ml-1 text-sm font-medium text-white  rounded-lg border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none  bg-purple-600 focus:ring-purple-800"
+          >
           Back
         </button>
       </div>
       <p className="text-2xl font-semibold text-center italic text-slate-400">
-        {q} results <br/> ({shuffledImages.length} images)
+        <span className="font-bold text-slate-300">{q}</span> results <br /> (
+        {shuffledImages.length} images)
       </p>
       <div className="grid gap-6 row-gap-5 mb-8 px-16 py-8 lg:grid-cols-5 sm:row-gap-6 sm:grid-cols-3">
         {shuffledImages.length > 0 ? (
@@ -117,11 +120,14 @@ export default function Search() {
             .map((image) => (
               <div className="relative overflow-hidden transition duration-200 transform rounded shadow-lg hover:-translate-y-2 hover:shadow-2xl">
                 <a href={image.url} target="_blank" rel="noreferrer">
-                <img
-                  className="object-cover w-full h-56 md:h-64 xl:h-80"
-                  src={image.img}
-                  alt={image.url}
-                />
+                  <img
+                    className="object-cover w-full h-56 md:h-64 xl:h-80"
+                    src={image.img}
+                    alt={image.url}
+                  />
+                  <span className="absolute top-0 right-0 px-2 py-1 m-2 text-xs font-semibold tracking-wider text-white uppercase bg-purple-600 rounded-full bg-opacity-60">
+                    {image.source}
+                  </span>
                 </a>
               </div>
             ))
