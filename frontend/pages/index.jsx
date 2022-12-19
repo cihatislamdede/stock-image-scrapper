@@ -59,6 +59,11 @@ export default function Home() {
                   placeholder="Search something..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSearch(e);
+                    }
+                  }}
                 />
               </div>
               <button
