@@ -113,7 +113,7 @@ export default function Search() {
         <span className="font-bold text-slate-300">{q}</span> results <br /> (
         {shuffledImages.length} images)
       </p>
-      <div className="grid gap-6 row-gap-5 mb-8 px-16 py-8 lg:grid-cols-5 sm:row-gap-6 sm:grid-cols-3">
+      <div className="grid gap-6 row-gap-5 px-16 py-6 lg:grid-cols-5 sm:row-gap-6 sm:grid-cols-3">
         {shuffledImages.length > 0 ? (
           shuffledImages
             .slice((paging - 1) * PAGE_SIZE, paging * PAGE_SIZE)
@@ -135,7 +135,7 @@ export default function Search() {
           <p> No images found </p>
         )}
       </div>
-      <div className="flex flex-row justify-center ">
+      <div className="flex flex-row justify-center mb-4">
         {shuffledImages.length > 0
           ? Array.from(
               { length: Math.ceil(shuffledImages.length / PAGE_SIZE) },
