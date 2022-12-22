@@ -11,8 +11,13 @@ export default function Home() {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    console.log(excludeSources);
     if (!searchTerm) {
-      alert("Please enter something to search");
+      alert("Please enter something to search!");
+      return;
+    }
+    if (excludeSources.length == SOURCES.length) {
+      alert("Please select at least one source to search!");
       return;
     }
     const exclude =

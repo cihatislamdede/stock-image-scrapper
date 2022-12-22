@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getImages, PAGE_SIZE } from "../../utils";
 import { SOURCES } from "../../utils";
 
@@ -14,6 +14,8 @@ export default function Search() {
   const [loading, setLoading] = useState(true);
   const [excludeSources, setExcludeSources] = useState([]);
   const [includedSources, setIncludedSources] = useState(SOURCES);
+
+  const topRef = useRef(null);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -61,7 +63,6 @@ export default function Search() {
         console.log(allImages);
         setShuffledImages(shuffleImages(allImages));
         if (exclude) {
-          //include sources as array
           const includedSources = SOURCES.filter(
             (source) => !exclude.includes(source)
           );
@@ -110,7 +111,7 @@ export default function Search() {
   return (
     <div className="bg-gray-900">
       {/* back button to search page */}
-      <div className="flex flex-row justify-center">
+      <div ref={topRef} className="flex flex-row justify-center">
         <button
           onClick={() => {
             router.push("/");
@@ -165,7 +166,7 @@ export default function Search() {
           shuffledImages
             .slice((paging - 1) * PAGE_SIZE, paging * PAGE_SIZE)
             .map((image) => (
-              <div className="relative overflow-hidden transition duration-200 transform rounded shadow-lg hover:-translate-y-2 hover:shadow-2xl">
+              <div className="relative overflow-hidden transition duration-200 transform rounded shadow-lg hover:-translate-y-2 hover:shadow-2x" key={image.url}>
                 <a href={image.url} target="_blank" rel="noreferrer">
                   <img
                     className="object-cover w-full h-56 md:h-64 xl:h-80"
@@ -185,23 +186,27 @@ export default function Search() {
       <div className="flex flex-row justify-center mb-4">
         {shuffledImages.length > 0
           ? Array.from(
-              { length: Math.ceil(shuffledImages.length / PAGE_SIZE) },
-              (v, i) => i + 1
-            ).map((page) => (
-              <button
-                key={page}
-                onClick={() => {
-                  setPaging(page);
-                }}
-                className={`rounded-md border-2 w-12 h-12 border-slate-800 bg-slate-50  font-semibold text-slate-800 transition-all p-2 m-2 ${
-                  paging === page
-                    ? "bg-purple-300"
-                    : "hover:bg-purple-400 transition-all"
+            { length: Math.ceil(shuffledImages.length / PAGE_SIZE) },
+            (v, i) => i + 1
+          ).map((page) => (
+            <button
+              key={page}
+              onClick={() => {
+                setPaging(page);
+                window.scrollTo({
+                  top: topRef.current.offsetTop,
+                  left: 0,
+                  behavior: "smooth"
+                });
+              }}
+              className={`rounded-md border-2 w-12 h-12 border-slate-800 bg-slate-50  font-semibold text-slate-800 transition-all p-2 m-2 ${paging === page
+                ? "bg-purple-300"
+                : "hover:bg-purple-400 transition-all"
                 }`}
-              >
-                {page}
-              </button>
-            ))
+            >
+              {page}
+            </button>
+          ))
           : null}
       </div>
     </div>
