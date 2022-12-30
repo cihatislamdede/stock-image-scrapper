@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, useRef } from "react";
-import { getImages, PAGE_SIZE } from "../../utils";
-import { SOURCES } from "../../utils";
+import { getImages, PAGE_SIZE, SOURCES } from "../../utils";
 
 export default function Search() {
   const router = useRouter();

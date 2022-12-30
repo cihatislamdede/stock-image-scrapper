@@ -25,45 +25,6 @@ def root():
     return RedirectResponse(url="/docs")
 
 
-@app.get("/search")
-def images(q: str, exclude: list = []):
-    if exclude != []:
-        exclude = exclude.split("+")
-    response = {}
-    if "adobestock" not in exclude:
-        try:
-            response["adobestock"] = AdobeStockCrawler().get_images(query=q)
-        except IndexError:
-            response["adobestock"] = []
-    if "burst" not in exclude:
-        try:
-            response["burst"] = BurstCrawler().get_images(query=q)
-        except IndexError:
-            response["burst"] = []
-    if "freeimages" not in exclude:
-        try:
-            response["freeimages"] = FreeImagesCrawler().get_images(query=q)
-        except IndexError:
-            response["freeimages"] = []
-    if "freepik" not in exclude:
-        try:
-            response["freepik"] = FreepikCrawler().get_images(query=q)
-        except IndexError:
-            response["freepik"] = []
-    if "stocksnap" not in exclude:
-        try:
-            response["stocksnap"] = StockSnapCrawler().get_images(query=q)
-        except IndexError:
-            response["stocksnap"] = []
-    if "unsplash" not in exclude:
-        try:
-            response["unsplash"] = UnsplashCrawler().get_images(query=q)
-        except IndexError:
-            response["unsplash"] = []
-
-    return response
-
-
 @app.get("/search/adobestock")
 def adobestock(q: str):
     try:
