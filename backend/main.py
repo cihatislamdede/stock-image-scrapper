@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 from crawlers.adobestock import AdobeStockCrawler
 from crawlers.burst import BurstCrawler
@@ -13,18 +14,20 @@ app = FastAPI()
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["http://localhost:3000",
+                   "https://stock-image-scrapper.vercel.app"],
+    allow_methods=["GET"],
 )
 
-# Search all images from all crawlers
+@app.get("/")
+def root():
+    return RedirectResponse(url="/docs")
+
+
 @app.get("/search")
-def images(q: str, exclude: str = None):
-    if exclude is not None:
-        exclude = exclude.split("+") 
-    else:
-        exclude = []
+def images(q: str, exclude: list = []):
+    if exclude != []:
+        exclude = exclude.split("+")
     response = {}
     if "adobestock" not in exclude:
         try:
@@ -56,7 +59,7 @@ def images(q: str, exclude: str = None):
             response["unsplash"] = UnsplashCrawler().get_images(query=q)
         except IndexError:
             response["unsplash"] = []
-    
+
     return response
 
 
@@ -77,6 +80,7 @@ def burst(q: str):
         response = []
     return response
 
+
 @app.get("/search/freeimages")
 def freeimages(q: str):
     try:
@@ -84,6 +88,7 @@ def freeimages(q: str):
     except IndexError:
         response = []
     return response
+
 
 @app.get("/search/freepik")
 def freepik(q: str):
@@ -93,6 +98,7 @@ def freepik(q: str):
         response = []
     return response
 
+
 @app.get("/search/stocksnap")
 def stocksnap(q: str):
     try:
@@ -100,6 +106,7 @@ def stocksnap(q: str):
     except IndexError:
         response = []
     return response
+
 
 @app.get("/search/unsplash")
 def unsplash(q: str):
