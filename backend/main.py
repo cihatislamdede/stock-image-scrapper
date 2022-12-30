@@ -19,6 +19,7 @@ app.add_middleware(
     allow_methods=["GET"],
 )
 
+
 @app.get("/")
 def root():
     return RedirectResponse(url="/docs")
