@@ -55,6 +55,12 @@ export default function Search() {
                 img: imgURL,
                 source: "adobestock",
               });
+            } else if (source === "freepik") {
+              allImages.push({
+                url: resdata[source][imgURL],
+                img: imgURL,
+                source: "freepik",
+              });
             }
           });
         });
@@ -108,7 +114,7 @@ export default function Search() {
   }
 
   return (
-    <div className="bg-gray-900 h-screen">
+    <div className="bg-gray-900 min-h-screen">
       {/* back button to search page */}
       <div ref={topRef} className="flex flex-row justify-center">
         <button
