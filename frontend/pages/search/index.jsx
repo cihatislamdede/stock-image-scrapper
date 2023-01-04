@@ -108,7 +108,7 @@ export default function Search() {
   }
 
   return (
-    <div className="bg-gray-900">
+    <div className="bg-gray-900 h-screen">
       {/* back button to search page */}
       <div ref={topRef} className="flex flex-row justify-center">
         <button
@@ -140,10 +140,10 @@ export default function Search() {
                   setExcludeSources(
                     excludeSources.filter((item) => item !== source)
                   );
-                  //add to shuffled images
+
                   let toAdd = imgUrls.filter((item) => item.source === source);
-                  setShuffledImages(() => [...shuffledImages, ...toAdd]);
-                  //TODO shuffle again
+                  const toshuffle = [...shuffledImages, ...toAdd];
+                  setShuffledImages(shuffleImages(toshuffle));
                 } else {
                   setExcludeSources(() => [...excludeSources, source]);
                   //remove from shuffled images
@@ -161,11 +161,14 @@ export default function Search() {
         ))}
       </div>
       <div className="grid gap-6 row-gap-5 px-16 py-6 lg:grid-cols-5 sm:row-gap-6 sm:grid-cols-3">
-        {shuffledImages.length > 0 ? (
+        {shuffledImages.length > 0 &&
           shuffledImages
             .slice((paging - 1) * PAGE_SIZE, paging * PAGE_SIZE)
             .map((image) => (
-              <div className="relative overflow-hidden transition duration-200 transform rounded shadow-lg hover:-translate-y-2 hover:shadow-2x" key={image.url}>
+              <div
+                className="relative overflow-hidden transition duration-200 transform rounded shadow-lg hover:-translate-y-2 hover:shadow-2x"
+                key={image.url}
+              >
                 <a href={image.url} target="_blank" rel="noreferrer">
                   <img
                     className="object-cover w-full h-56 md:h-64 xl:h-80"
@@ -177,35 +180,37 @@ export default function Search() {
                   </span>
                 </a>
               </div>
-            ))
-        ) : (
-          <p> No images found </p>
-        )}
+            ))}
       </div>
+      {shuffledImages.length == 0 && (
+        <p className="text-center text-3xl text-slate-200"> No images found...</p>
+      )}
+
       <div className="flex flex-row justify-center mb-4">
         {shuffledImages.length > 0
           ? Array.from(
-            { length: Math.ceil(shuffledImages.length / PAGE_SIZE) },
-            (v, i) => i + 1
-          ).map((page) => (
-            <button
-              key={page}
-              onClick={() => {
-                setPaging(page);
-                window.scrollTo({
-                  top: topRef.current.offsetTop,
-                  left: 0,
-                  behavior: "smooth"
-                });
-              }}
-              className={`rounded-md border-2 w-12 h-12 border-slate-800 bg-slate-50  font-semibold text-slate-800 transition-all p-2 m-2 ${paging === page
-                ? "bg-purple-300"
-                : "hover:bg-purple-400 transition-all"
+              { length: Math.ceil(shuffledImages.length / PAGE_SIZE) },
+              (v, i) => i + 1
+            ).map((page) => (
+              <button
+                key={page}
+                onClick={() => {
+                  setPaging(page);
+                  window.scrollTo({
+                    top: topRef.current.offsetTop,
+                    left: 0,
+                    behavior: "smooth",
+                  });
+                }}
+                className={`rounded-md border-2 w-12 h-12 border-slate-800 bg-slate-50  font-semibold text-slate-800 transition-all p-2 m-2 ${
+                  paging === page
+                    ? "bg-purple-300"
+                    : "hover:bg-purple-400 transition-all"
                 }`}
-            >
-              {page}
-            </button>
-          ))
+              >
+                {page}
+              </button>
+            ))
           : null}
       </div>
     </div>
