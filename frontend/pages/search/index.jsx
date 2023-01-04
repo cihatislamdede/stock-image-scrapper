@@ -124,7 +124,7 @@ export default function Search() {
         <span className="font-bold text-slate-300">{q}</span> results <br /> (
         {shuffledImages.length} images)
       </p>
-      <div className="flex flex-wrap justify-center mt-4">
+      <div className="flex flex-wrap justify-center mt-4 gap-y-2 md:gap-y-1">
         {includedSources.map((source) => (
           <label
             className="inline-flex relative items-center mr-2 cursor-pointer"

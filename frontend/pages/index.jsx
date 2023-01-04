@@ -79,7 +79,7 @@ export default function Home() {
                 Search
               </button>
             </form>
-            <div className="flex flex-wrap justify-center mt-4">
+            <div className="flex flex-wrap justify-center mt-4 gap-y-2 md:gap-y-1">
               {SOURCES.map((source) => (
                 <label
                   className="inline-flex relative items-center mr-2 cursor-pointer"
