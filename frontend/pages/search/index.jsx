@@ -23,7 +23,6 @@ export default function Search() {
         const resdata = await getImages(q, exclude);
         Object.keys(resdata).map((source) => {
           Object.keys(resdata[source]).map((imgURL) => {
-            //except freepik and adobe
             //all : adobestock, burst, freeimages, freepik, stocksnap, unsplash
             if (source === "burst") {
               allImages.push({
@@ -65,7 +64,7 @@ export default function Search() {
           });
         });
         setImgUrls(allImages);
-        console.log(allImages);
+        //console.log(allImages);
         setShuffledImages(shuffleImages(allImages));
         if (exclude) {
           const includedSources = SOURCES.filter(

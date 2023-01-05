@@ -11,7 +11,7 @@ export default function Home() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log(excludeSources);
+    //console.log(excludeSources);
     if (!searchTerm) {
       alert("Please enter something to search!");
       return;
